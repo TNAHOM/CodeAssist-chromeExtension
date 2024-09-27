@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
     scrapeButton.addEventListener('click', function () {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { action: "scrape" }, function (response) {
-                if (response && response.code) {
-                    codeElement.textContent = response.code;
+                if (response && response.text) {
+                    codeElement.textContent = response.text;
                     Prism.highlightElement(codeElement);
                     resultDiv.style.display = 'block';
                     copyButton.style.display = 'block';
@@ -44,7 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 action: buttonType
             })
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (buttonType === 'questionBreakdown') {
                     explainDiv.innerHTML = `
@@ -60,14 +65,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     hintDiv.style.display = 'block';
                 }
             })
-            .catch(error => console.error('Error fetching hint:', error));
+            .catch(error => {
+                console.error('Error fetching hint:', error);
+                hintDiv.innerHTML = `
+                <h2 class="hint-header">Error</h2>
+                <div class="hint-body">Failed to fetch hint. Please try again.</div>
+            `;
+                hintDiv.style.display = 'block';
+            });
     }
 
     function scrapeAndGetHint(buttonType) {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { action: "scrape_elfjS" }, function (response) {
-                if (response && response.question) {
-                    const scrapedText = response.question;
+                if (response && response.text) {
+                    const scrapedText = response.text;
                     getHint(scrapedText, buttonType);
                 } else {
                     hintDiv.innerHTML = `
@@ -80,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     hintButtonLow.addEventListener('click', function () {
+        console.log('low');
         scrapeAndGetHint('low');
     });
 
@@ -103,17 +116,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 chrome.tabs.sendMessage(tabs[0].id, { action: "scrape_elfjS" }, function (questionResponse) {
                     if (codeResponse && questionResponse) {
                         const customPrompt = userPrompt.value;
-                        const formatedCode = codeResponse.code;
-                        codeElementPass.textContent = formatedCode;
-                        codeBlock.appendChild(codeElement);
-                        Prism.highlightElement(codeElement);
-                        const highlightedCode = codeElementPass.innerHTML;
+                        const rawCode = codeResponse.text; // Raw code
+                        console.log(customPrompt);
+                        console.log(rawCode);
 
+                        codeElementPass.textContent = rawCode; // Display the raw code
+                        codeBlock.appendChild(codeElementPass);
+                        Prism.highlightElement(codeElementPass); // Still apply highlighting for frontend display
+                        console.log(codeBlock, 'block');
+                        console.log(codeElementPass, 'pass');
                         const combinedText = `
-                            Custom Prompt: ${customPrompt} 
-                            \n\nCode Snippet:\n${highlightedCode}
-                            \n\nLeetcode Question:\n${questionResponse.question}
-                        `;
+                        Custom Prompt: ${customPrompt} 
+                        \n\nCode Snippet:\n${rawCode} 
+                        \n\nLeetcode Question:\n${questionResponse.text}
+                    `;
 
                         fetch('http://localhost:8000/get_hint', {
                             method: 'POST',
@@ -122,26 +138,27 @@ document.addEventListener('DOMContentLoaded', function () {
                             },
                             body: JSON.stringify({
                                 text: combinedText,
-                                action: 'custom' // New action type for user prompt
+                                action: 'custom'
                             })
                         })
                             .then(response => response.json())
                             .then(data => {
                                 hintDiv.innerHTML = `
-                                    <h2 class="hint-header">Custom Prompt Result</h2>
-                                    <div class="hint-body">${data.hint}</div>
-                                `;
+                                <h2 class="hint-header">Custom Prompt Result</h2>
+                                <div class="hint-body">${data.hint}</div>
+                            `;
                                 hintDiv.style.display = 'block';
                             })
                             .catch(error => console.error('Error fetching custom prompt response:', error));
                     } else {
                         hintDiv.innerHTML = `
-                            <h2 class="hint-header">Error</h2>
-                            <div class="hint-body">Unable to scrape code or question.</div>
-                        `;
+                        <h2 class="hint-header">Error</h2>
+                        <div class="hint-body">Unable to scrape code or question.</div>
+                    `;
                     }
                 });
             });
         });
     });
+
 });

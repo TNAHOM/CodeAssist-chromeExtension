@@ -26,6 +26,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         } else {
             sendResponse({ text: null });
         }
+    } else if (request.action === "toggleScraper") {
+        // Add functionality to toggle scraper here
+        // This is to handle the message from the background script
+        sendResponse({ message: "Scraper toggled" });
     }
     return true;
 });
