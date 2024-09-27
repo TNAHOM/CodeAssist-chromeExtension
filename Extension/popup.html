@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Code Scraper</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="prisma/prisma.css">
+</head>
+
+<body>
+    <h1>Competitive Assistant</h1>
+
+    <!-- Add a textarea for custom user input -->
+    <div class="user-input">
+        <textarea id="userPrompt" rows="5" placeholder="Enter your custom prompt here..."></textarea>
+        <button id="submitButton">Submit Prompt</button>
+    </div>
+
+    <div class="button-group">
+        <button id="scrapeButton">Extract Code</button>
+        <button id="hintButtonLow">Subtle Hint (1)</button>
+        <button id="hintButtonMedium">Guided Hint (2)</button>
+        <button id="hintButtonHigh">Detailed Hint (3)</button>
+        <button id="explainButton">Problem Breakdown</button>
+    </div>
+
+    <div id="hintResult" style="display: none;"></div>
+    <div id="explain" style="display: none;"></div>
+    <div id="result" style="display: none;">
+        <pre><code class="language-python"></code></pre>
+    </div>
+    <button id="copyButton">Copy to Clipboard</button>
+
+    <script src="prisma/prisma.js"></script>
+    <script src="popup.js"></script>
+</body>
+
+</html>

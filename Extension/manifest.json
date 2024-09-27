@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Text Scraper",
+  "version": "1.0",
+  "description": "Scrapes text from a specific class on a website",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/problems/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
