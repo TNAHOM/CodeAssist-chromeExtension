@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Created just to pass the code in a formatted manner to the get_hint
     const codeElementPass = document.createElement('code');
     const codeBlock = document.createElement('pre');
+    codeBlock.classList.add('language-python');
+    codeElementPass.classList.add('language-python');
+
 
 
 
