@@ -1,9 +1,3 @@
-convert to markdown text:
-
- 
-
----
-
 # LeetCode Assistant
 
 LeetCode Assistant is a Chrome extension that helps competitive programmers by offering hints, breaking down questions, and providing detailed explanations for LeetCode problems. Additionally, users can interact with the assistant to clarify doubts or ask questions about the code or problem.
@@ -33,15 +27,15 @@ CodeAssistant
 ├── Extension/
 │   ├── prisma/
 │   ├── background.js  # Handles background actions for the Chrome extension
-│   ├── content.js  # Handles scraping logic
+│   ├── content.js
 │   ├── manifest.json  # Chrome extension manifest
 │   ├── popup.html  # The UI for the popup
 │   ├── popup.js  # Handles frontend logic for the popup, including button actions
-│   ├── styles.css  # Styles for the popup UI
+│   ├── styles.css 
 │
-├── .env  # Environment variables
-├── .gitignore  # Files to ignore in version control
-└── requirements.txt  # Python dependencies for the backend
+├── .env
+├── .gitignore
+└── requirements.txt
 ```
 
 ---
@@ -95,12 +89,16 @@ CodeAssistant
 
 2. **Hint Generation**:
    - Click the **Hint** button to get a hint at the selected level (Subtle, Guided, or Detailed). The AI will generate a helpful hint based on the question.
+   -  ![hint](./image/hint.png)
+
 
 3. **Question Breakdown**:
    - Click the **Breakdown** button to receive a simpler breakdown of the current LeetCode problem.
+   -  ![breakdown](./image/home.png)
 
 4. **Chat with the Assistant**:
    - You can ask specific questions or clarifications about the code or the problem by interacting with the assistant.
+   -  ![chatWithAssistant](./image/explain.png) 
 
 ---
 
@@ -117,20 +115,6 @@ CodeAssistant
   - Prism.js (for code syntax highlighting)
   
 ---
-
-## Screenshots
-
-### Popup Interface
-![Popup](file-ybYoE2Qqy94BUZVe7sn3lukU)
-
-### Generated Hints
-![Hint Output](file-Qi5qNCE6wuN9trZCBFg7Ne20)
-
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
